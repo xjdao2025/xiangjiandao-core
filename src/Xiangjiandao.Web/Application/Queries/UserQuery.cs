@@ -43,6 +43,7 @@ public class UserQuery(
                 Email = user.Email,
                 Score = user.Score,
                 Disable = user.Disable,
+                CreatedAt = user.CreatedAt,
             })
             .ToPagedDataAsync(req.PageNum, req.PageSize, countTotal: true, cancellationToken: cancellationToken);
     }
@@ -74,6 +75,7 @@ public class UserQuery(
                 Email = user.Email,
                 Score = user.Score,
                 Disable = user.Disable,
+                CreatedAt = user.CreatedAt,
             })
             .ToPagedDataAsync(req.PageNum, req.PageSize, countTotal: true, cancellationToken: cancellationToken);
     }
