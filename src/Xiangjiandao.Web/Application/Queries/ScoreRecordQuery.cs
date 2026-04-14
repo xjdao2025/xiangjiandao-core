@@ -19,6 +19,7 @@ public class ScoreRecordQuery(ApplicationDbContext dbContext)
             .Select(record => new UserScoreRecordPageVo
             {
                 Id = record.Id,
+                ParticipatorId = record.ParticipatorId,
                 Score = record.Score,
                 Type = record.Type,
                 Reason = record.Reason,

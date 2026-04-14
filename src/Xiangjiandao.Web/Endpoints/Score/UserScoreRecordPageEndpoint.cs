@@ -54,10 +54,15 @@ public class UserScoreRecordPageVo
     /// 稻米明细主键Id
     /// </summary>
     public ScoreRecordId Id { get; set; } = null!;
-    
+
+    /// <summary>
+    /// 参与方用户Id
+    /// </summary>
+    public UserId ParticipatorId { get; set; } = null!;
+
     /// <summary>
     /// 稻米来源类型
-    /// </summary> 
+    /// </summary>
     public ScoreSourceType Type { get; set; } = ScoreSourceType.Unknown;
 
     /// <summary>

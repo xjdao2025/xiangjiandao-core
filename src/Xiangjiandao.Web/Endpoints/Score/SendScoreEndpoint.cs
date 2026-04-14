@@ -1,5 +1,6 @@
 using System.Text.RegularExpressions;
 using Xiangjiandao.Domain.AggregatesModel.UserAggregate;
+using Xiangjiandao.Domain.Dto;
 using Xiangjiandao.Web.Application.Commands;
 using Xiangjiandao.Web.Application.Queries;
 using Xiangjiandao.Web.Extensions;
@@ -53,9 +54,17 @@ public class SendScoreEndpoint(
         {
             throw new KnownException("当前用户稻米不足");
         }
-        
-        var toUser = await query.GetUserByPhoneOrEmail(req.UserPhoneOrEmail, ct);
-        
+
+        UserDetailDto? toUser = null;
+        if (req.ToUserId != null && req.ToUserId.Id != Guid.Empty)
+        {
+            toUser = await query.GetUserById(req.ToUserId, ct);
+        }
+        else if (!string.IsNullOrEmpty(req.UserPhoneOrEmail))
+        {
+            toUser = await query.GetUserByPhoneOrEmail(req.UserPhoneOrEmail, ct);
+        }
+
         if (toUser is null)
         {
             throw new KnownException("接收用户不存在");
@@ -92,8 +101,13 @@ public record SendScoreReq
     /// <summary>
     /// 接收用户的手机号或邮箱
     /// </summary>
-    public required string UserPhoneOrEmail { get; set; }
-    
+    public string UserPhoneOrEmail { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 接收用户的UserId（与UserPhoneOrEmail二选一）
+    /// </summary>
+    public UserId? ToUserId { get; set; }
+
     /// <summary>
     /// 稻米
     /// </summary>
@@ -114,8 +128,24 @@ public class SendScoreReqValidator : AbstractValidator<SendScoreReq>
     {
         var phonePattern = @"^1[3-9]\d{9}$";
         var emailPattern = @"^[^@\s]+@[^@\s]+\.[^@\s]+$";
-        RuleFor(x => x.UserPhoneOrEmail).NotEmpty().WithMessage("接收用户的手机号或邮箱不能为空")
-            .Must(x=> Regex.IsMatch(x,  phonePattern)||  Regex.IsMatch(x, emailPattern))
+        RuleFor(x => x.UserPhoneOrEmail)
+            .Must((req, phoneOrEmail) =>
+            {
+                if (req.ToUserId != null && req.ToUserId.Id != Guid.Empty)
+                {
+                    return true;
+                }
+                return !string.IsNullOrEmpty(phoneOrEmail);
+            })
+            .WithMessage("接收用户的手机号或邮箱不能为空")
+            .Must(phoneOrEmail =>
+            {
+                if (string.IsNullOrEmpty(phoneOrEmail))
+                {
+                    return true;
+                }
+                return Regex.IsMatch(phoneOrEmail, phonePattern) || Regex.IsMatch(phoneOrEmail, emailPattern);
+            })
             .WithMessage("用户手机号或邮箱格式不正确");
         RuleFor(x => x.Score).GreaterThan(0).WithMessage("稻米值必须大于0");
         RuleFor(x => x.Remark)
