@@ -46,4 +46,9 @@ public class NodeUserPageVo
     /// 是否禁用
     /// </summary> 
     public bool Disable { get; set; } = false;
+
+    /// <summary>
+    /// 创建时间
+    /// </summary> 
+    public DateTime CreatedAt { get; set; }
 }
