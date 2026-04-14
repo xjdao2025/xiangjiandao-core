@@ -211,6 +211,19 @@ CREATE TABLE `t_proposal` (
     CONSTRAINT `PK_t_proposal` PRIMARY KEY (`id`)
 ) CHARACTER SET=utf8mb4;
 
+CREATE TABLE `t_proposal_comment` (
+  `id` bigint NOT NULL AUTO_INCREMENT COMMENT '评论主键Id',
+  `proposal_id` char(36) NOT NULL COMMENT '提案Id',
+  `user_id` char(36) NOT NULL COMMENT '评论用户Id',
+  `user_name` varchar(64) NOT NULL DEFAULT '' COMMENT '评论用户名称',
+  `content` varchar(512) NOT NULL DEFAULT '' COMMENT '评论内容',
+  `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `deleted` tinyint NOT NULL DEFAULT '0' COMMENT '是否删除',
+  PRIMARY KEY (`id`),
+  KEY `idx_proposal_id` (`proposal_id`),
+  KEY `idx_created_at` (`created_at`)
+) CHARACTER SET=utf8mb4;
+
 CREATE TABLE `t_user` (
     `id` char(36) COLLATE ascii_general_ci NOT NULL,
     `email` varchar(64) CHARACTER SET utf8mb4 NOT NULL DEFAULT '' COMMENT '邮箱',

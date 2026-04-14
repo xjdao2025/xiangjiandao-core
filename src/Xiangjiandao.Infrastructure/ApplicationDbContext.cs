@@ -110,6 +110,11 @@ namespace Xiangjiandao.Infrastructure
         public DbSet<VoteRecord> VoteRecords => Set<VoteRecord>();
 
         /// <summary>
+        /// 提案评论
+        /// </summary>
+        public DbSet<ProposalComment> ProposalComments => Set<ProposalComment>();
+
+        /// <summary>
         /// 用户勋章
         /// </summary>
         public DbSet<UserMedal> UserMedals => Set<UserMedal>();

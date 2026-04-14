@@ -115,6 +115,37 @@ public class ProposalDetailVo
     /// 创建时间
     /// </summary> 
     public required DateTimeOffset CreatedAt { get; set; }
+
+    /// <summary>
+    /// 评论列表
+    /// </summary>
+    public List<ProposalCommentVo> Comments { get; set; } = [];
+}
+
+/// <summary>
+/// 提案评论 Vo
+/// </summary>
+public class ProposalCommentVo
+{
+    /// <summary>
+    /// 评论 Id
+    /// </summary>
+    public required string CommentId { get; set; }
+
+    /// <summary>
+    /// 评论用户名称
+    /// </summary>
+    public required string UserName { get; set; }
+
+    /// <summary>
+    /// 评论内容
+    /// </summary>
+    public required string Content { get; set; }
+
+    /// <summary>
+    /// 创建时间
+    /// </summary>
+    public required DateTimeOffset CreatedAt { get; set; }
 }
 
 /// <summary>
