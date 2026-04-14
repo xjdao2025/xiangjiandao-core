@@ -133,6 +133,11 @@ public class ProposalCommentVo
     public required string CommentId { get; set; }
 
     /// <summary>
+    /// 评论用户 Id
+    /// </summary>
+    public required string UserId { get; set; }
+
+    /// <summary>
     /// 评论用户名称
     /// </summary>
     public required string UserName { get; set; }

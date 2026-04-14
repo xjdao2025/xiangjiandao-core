@@ -136,6 +136,7 @@ public class ProposalQuery(ApplicationDbContext dbContext)
                 .Select(c => new ProposalCommentVo
                 {
                     CommentId = c.Id.ToString(),
+                    UserId = c.UserId.ToString(),
                     UserName = c.UserName,
                     Content = c.Content,
                     CreatedAt = c.CreatedAt,
@@ -183,6 +184,7 @@ public class ProposalQuery(ApplicationDbContext dbContext)
                 .Select(c => new ProposalCommentVo
                 {
                     CommentId = c.Id.ToString(),
+                    UserId = c.UserId.ToString(),
                     UserName = c.UserName,
                     Content = c.Content,
                     CreatedAt = c.CreatedAt,
