@@ -63,6 +63,22 @@ CREATE TABLE `t_admin_user` (
     CONSTRAINT `PK_t_admin_user` PRIMARY KEY (`id`)
 ) CHARACTER SET=utf8mb4;
 
+CREATE TABLE `t_app` (
+    `id` char(36) COLLATE ascii_general_ci NOT NULL,
+    `name` varchar(256) CHARACTER SET utf8mb4 NOT NULL DEFAULT '' COMMENT '应用名称',
+    `desc` varchar(256) CHARACTER SET utf8mb4 NOT NULL DEFAULT '' COMMENT '应用描述',
+    `logo` varchar(256) CHARACTER SET utf8mb4 NOT NULL DEFAULT '' COMMENT '应用图标',
+    `sort` int NOT NULL COMMENT '应用排序',
+    `link` varchar(256) CHARACTER SET utf8mb4 NOT NULL DEFAULT '' COMMENT '应用链接',
+    `row_version` int NOT NULL DEFAULT 0 COMMENT '并发乐观锁',
+    `created_at` datetime NOT NULL DEFAULT current_timestamp COMMENT '创建时间',
+    `created_by` varchar(64) CHARACTER SET utf8mb4 NOT NULL DEFAULT '' COMMENT '创建者',
+    `updated_at` datetime NOT NULL DEFAULT current_timestamp COMMENT '更新时间',
+    `updated_by` varchar(64) CHARACTER SET utf8mb4 NOT NULL DEFAULT '' COMMENT '更新者',
+    `deleted` tinyint NOT NULL DEFAULT 0 COMMENT '是否删除',
+    CONSTRAINT `PK_t_app` PRIMARY KEY (`id`)
+) CHARACTER SET=utf8mb4;
+
 CREATE TABLE `t_banner` (
     `id` char(36) COLLATE ascii_general_ci NOT NULL,
     `banner_file_id` varchar(64) CHARACTER SET utf8mb4 NOT NULL DEFAULT '' COMMENT 'Banner 文件 Id',
@@ -91,6 +107,20 @@ CREATE TABLE `t_global_config` (
     CONSTRAINT `PK_t_global_config` PRIMARY KEY (`id`)
 ) CHARACTER SET=utf8mb4;
 
+CREATE TABLE `t_information` (
+    `id` char(36) COLLATE ascii_general_ci NOT NULL,
+    `name` varchar(128) CHARACTER SET utf8mb4 NOT NULL DEFAULT '' COMMENT '公告名称',
+    `attach_id` varchar(128) CHARACTER SET utf8mb4 NOT NULL DEFAULT '' COMMENT '附件 Id',
+    `sort` int NOT NULL DEFAULT 0 COMMENT '公告排序',
+    `row_version` int NOT NULL DEFAULT 0 COMMENT '并发乐观锁',
+    `created_at` datetime NOT NULL DEFAULT current_timestamp COMMENT '创建时间',
+    `created_by` varchar(64) CHARACTER SET utf8mb4 NOT NULL DEFAULT '' COMMENT '创建者',
+    `updated_at` datetime NOT NULL DEFAULT current_timestamp COMMENT '更新时间',
+    `updated_by` varchar(64) CHARACTER SET utf8mb4 NOT NULL DEFAULT '' COMMENT '更新者',
+    `deleted` tinyint NOT NULL DEFAULT 0 COMMENT '是否删除',
+    CONSTRAINT `PK_t_information` PRIMARY KEY (`id`)
+) CHARACTER SET=utf8mb4;
+
 CREATE TABLE `t_medal` (
     `id` char(36) COLLATE ascii_general_ci NOT NULL,
     `attach_id` varchar(64) CHARACTER SET utf8mb4 NOT NULL DEFAULT '' COMMENT '附件 Id',
@@ -107,6 +137,8 @@ CREATE TABLE `t_medal` (
 
 CREATE TABLE `t_node` (
     `id` char(36) COLLATE ascii_general_ci NOT NULL,
+    `user_id` char(36) COLLATE ascii_general_ci NOT NULL COMMENT '节点用户 Id',
+    `user_did` varchar(128) CHARACTER SET utf8mb4 NOT NULL DEFAULT '' COMMENT '节点用户 Did',
     `logo` varchar(64) CHARACTER SET utf8mb4 NOT NULL DEFAULT '' COMMENT '节点 Logo',
     `name` varchar(64) CHARACTER SET utf8mb4 NOT NULL DEFAULT '' COMMENT '节点名称',
     `description` longtext CHARACTER SET utf8mb4 NOT NULL COMMENT '节点描述',
@@ -139,8 +171,12 @@ CREATE TABLE `t_point_distribute_record` (
 CREATE TABLE `t_point_record` (
     `id` char(36) COLLATE ascii_general_ci NOT NULL,
     `user_id` char(36) COLLATE ascii_general_ci NOT NULL COMMENT '所属用户',
+    `participator_id` char(36) COLLATE ascii_general_ci NOT NULL COMMENT '积分记录的另一个参与用户 Id',
+    `participator_domain_name` varchar(256) CHARACTER SET utf8mb4 NOT NULL DEFAULT '' COMMENT '参与方域名',
+    `participator_nick_name` varchar(64) CHARACTER SET utf8mb4 NOT NULL DEFAULT '' COMMENT '参与方昵称',
     `type` int NOT NULL DEFAULT 0 COMMENT '积分来源类型',
     `reason` varchar(64) CHARACTER SET utf8mb4 NOT NULL DEFAULT '' COMMENT '获得原因',
+    `remark` varchar(64) CHARACTER SET utf8mb4 NOT NULL DEFAULT '' COMMENT '附言',
     `score` bigint NOT NULL COMMENT '积分数量',
     `created_at` datetime NOT NULL DEFAULT current_timestamp COMMENT '创建时间',
     `created_by` varchar(64) CHARACTER SET utf8mb4 NOT NULL DEFAULT '' COMMENT '创建者',
@@ -231,20 +267,6 @@ CREATE TABLE `t_vote_record` (
     CONSTRAINT `FK_t_vote_record_t_proposal_proposal_id` FOREIGN KEY (`proposal_id`) REFERENCES `t_proposal` (`id`) ON DELETE CASCADE
 ) CHARACTER SET=utf8mb4;
 
-CREATE TABLE `t_information` (
-    `id` char(36) COLLATE ascii_general_ci NOT NULL,
-    `name` VARCHAR(128) DEFAULT '' NOT NULL COMMENT '公告名称',
-    `attach_id` VARCHAR(128) CHARACTER SET utf8mb4 DEFAULT '' NOT NULL COMMENT '附件 Id',
-    `row_version` INT DEFAULT 0 NOT NULL COMMENT '并发乐观锁',
-    `created_at` datetime DEFAULT current_timestamp NOT NULL COMMENT '创建时间',
-    `created_by` VARCHAR(64) CHARACTER SET utf8mb4 DEFAULT '' NOT NULL COMMENT '创建者',
-    `updated_at` datetime DEFAULT current_timestamp NOT NULL COMMENT '更新时间',
-    `updated_by` VARCHAR(64) CHARACTER SET utf8mb4 DEFAULT '' NOT NULL COMMENT '更新者',
-    `deleted` tinyint DEFAULT 0 NOT NULL COMMENT '是否删除',
-    `sort` int DEFAULT 0 NOT NULL COMMENT '公告排序',
-    CONSTRAINT `PK_t_information` PRIMARY KEY (`id`)
-) CHARACTER SET=utf8mb4;
-
 CREATE INDEX `IX_ExpiresAt_StatusName` ON `CAPPublishedMessage` (`ExpiresAt`, `StatusName`);
 
 CREATE INDEX `IX_Version_ExpiresAt_StatusName` ON `CAPPublishedMessage` (`Version`, `ExpiresAt`, `StatusName`);
@@ -256,7 +278,7 @@ CREATE INDEX `IX_Version_ExpiresAt_StatusName1` ON `CAPReceivedMessage` (`Versio
 CREATE INDEX `IX_t_vote_record_proposal_id` ON `t_vote_record` (`proposal_id`);
 
 INSERT INTO `__EFMigrationsHistory` (`MigrationId`, `ProductVersion`)
-VALUES ('20250812024510_InitialCreate', '9.0.0');
+VALUES ('20260413074810_InitialCreate1', '9.0.0');
 
 COMMIT;
 

@@ -50,6 +50,11 @@ public class ScoreRecord : Entity<ScoreRecordId>, IAggregateRoot
     public string Reason { get; private set; } = string.Empty;
 
     /// <summary>
+    /// 附言
+    /// </summary> 
+    public string Remark { get; private set; } = string.Empty;
+
+    /// <summary>
     /// 稻米数量
     /// </summary> 
     public long Score { get; private set; }
@@ -89,7 +94,8 @@ public class ScoreRecord : Entity<ScoreRecordId>, IAggregateRoot
         string participatorNickName,
         ScoreSourceType type,
         string reason,
-        long score
+        long score,
+        string remark = ""
     )
     {
         var instance = new ScoreRecord
@@ -100,6 +106,7 @@ public class ScoreRecord : Entity<ScoreRecordId>, IAggregateRoot
             ParticipatorNickName = participatorNickName,
             Type = type,
             Reason = reason,
+            Remark = remark,
             Score = score,
             CreatedAt = DateTimeOffset.Now,
         };

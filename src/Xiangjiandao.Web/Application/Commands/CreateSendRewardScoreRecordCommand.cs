@@ -30,7 +30,12 @@ public record CreateSendRewardScoreRecordCommand:  ICommand<bool>
     /// 原因
     /// </summary>
     public string Reason { get; set; } = string.Empty;
-    
+
+    /// <summary>
+    /// 附言
+    /// </summary>
+    public string Remark { get; set; } = string.Empty;
+
     /// <summary>
     /// 类型
     /// </summary>
@@ -71,7 +76,8 @@ public class CreateSendRewardScoreRecordCommandHandler(
             participatorNickName: toUser.NickName,
             type: command.Type,
             reason: $"{command.Reason}用户「 {toUser.DomainName} 」",
-            score: -1 * command.Score
+            score: -1 * command.Score,
+            remark: command.Remark
         ));
         record.Add(ScoreRecord.Create(
             userId: toUser.Id,
@@ -80,7 +86,8 @@ public class CreateSendRewardScoreRecordCommandHandler(
             participatorNickName: fromUser.NickName,
             type: command.Type,
             reason: $"用户「 {fromUser.DomainName} 」{command.Reason}",
-            score: command.Score
+            score: command.Score,
+            remark: command.Remark
         ));
         await scoreRecordRepository.AddRangeAsync(record, cancellationToken);
         return true;

@@ -74,7 +74,8 @@ public class RewardScoreEndpoint(
             Score = req.Score,
             ToUserId = toUser.Id,
             Reason = ScoreSourceType.Reward.GetDesc(),
-            Type = ScoreSourceType.Reward
+            Type = ScoreSourceType.Reward,
+            Remark = string.Empty
         }).AsSuccessResponseData(),  cancellation: ct);
         
     }

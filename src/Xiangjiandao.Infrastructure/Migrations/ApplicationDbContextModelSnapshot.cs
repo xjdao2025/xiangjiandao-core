@@ -1161,6 +1161,15 @@ namespace Xiangjiandao.Infrastructure.Migrations
                         .HasColumnName("reason")
                         .HasComment("获得原因");
 
+                    b.Property<string>("Remark")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(64)
+                        .HasColumnType("varchar")
+                        .HasDefaultValue("")
+                        .HasColumnName("remark")
+                        .HasComment("附言");
+
                     b.Property<long>("Score")
                         .HasColumnType("bigint")
                         .HasColumnName("score")

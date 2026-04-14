@@ -46,6 +46,12 @@ internal class ScoreRecordTypeConfiguration : IEntityTypeConfiguration<ScoreReco
             .HasMaxLength(64)
             .HasDefaultValue(string.Empty)
             .HasComment("获得原因");
+        builder.Property(t => t.Remark)
+            .HasColumnName("remark")
+            .HasColumnType("varchar")
+            .HasMaxLength(64)
+            .HasDefaultValue(string.Empty)
+            .HasComment("附言");
         builder.Property(t => t.Score)
             .HasColumnName("score")
             .HasColumnType("bigint")

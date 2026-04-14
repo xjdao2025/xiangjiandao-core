@@ -76,7 +76,8 @@ public class SendScoreEndpoint(
             Score = req.Score,
             ToUserId = toUser.Id,
             Reason = ScoreSourceType.Send.GetDesc(),
-            Type = ScoreSourceType.Send
+            Type = ScoreSourceType.Send,
+            Remark = req.Remark
         }).AsSuccessResponseData(),  cancellation: ct);
         
     }
@@ -97,6 +98,11 @@ public record SendScoreReq
     /// 稻米
     /// </summary>
     public required long Score { get; set; }
+
+    /// <summary>
+    /// 附言
+    /// </summary>
+    public string Remark { get; set; } = string.Empty;
 }
 
 /// <summary>
@@ -112,5 +118,7 @@ public class SendScoreReqValidator : AbstractValidator<SendScoreReq>
             .Must(x=> Regex.IsMatch(x,  phonePattern)||  Regex.IsMatch(x, emailPattern))
             .WithMessage("用户手机号或邮箱格式不正确");
         RuleFor(x => x.Score).GreaterThan(0).WithMessage("稻米值必须大于0");
+        RuleFor(x => x.Remark)
+            .MaximumLength(20).WithMessage("附言长度不能超过20个字符");
     }
 }

@@ -66,6 +66,11 @@ public class UserScoreRecordPageVo
     public string Reason { get; set; } = string.Empty;
 
     /// <summary>
+    /// 附言
+    /// </summary> 
+    public string Remark { get; set; } = string.Empty;
+
+    /// <summary>
     /// 稻米数量
     /// </summary> 
     public long Score { get; set; }
