@@ -6,6 +6,7 @@ using Xiangjiandao.Domain.AggregatesModel.ProposalAggregate;
 using Xiangjiandao.Domain.AggregatesModel.UserAggregate;
 using Xiangjiandao.Domain.Enums;
 using Xiangjiandao.Web.Application.Queries;
+using Xiangjiandao.Web.Endpoints.Proposal;
 using Xiangjiandao.Web.Extensions;
 using Xiangjiandao.Web.Utils;
 
@@ -112,6 +113,11 @@ public class AdminProposalDetailVo
     /// 创建时间
     /// </summary> 
     public required DateTimeOffset CreatedAt { get; set; }
+
+    /// <summary>
+    /// 评论列表
+    /// </summary>
+    public List<ProposalCommentVo> Comments { get; set; } = [];
 }
 
 /// <summary>

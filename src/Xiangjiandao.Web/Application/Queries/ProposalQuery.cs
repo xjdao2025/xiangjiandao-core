@@ -154,7 +154,7 @@ public class ProposalQuery(ApplicationDbContext dbContext)
         CancellationToken cancellationToken
     )
     {
-        return await dbContext.Proposals
+        var detail = await dbContext.Proposals
             .Where(proposal => proposal.Id == proposalId)
             .Select(proposal => new AdminProposalDetailVo
             {
@@ -174,6 +174,23 @@ public class ProposalQuery(ApplicationDbContext dbContext)
                 AttachId = proposal.AttachId,
             })
             .FirstOrDefaultAsync(cancellationToken);
+
+        if (detail is not null)
+        {
+            detail.Comments = await dbContext.ProposalComments
+                .Where(c => c.ProposalId == proposalId && !c.Deleted)
+                .OrderBy(c => c.CreatedAt)
+                .Select(c => new ProposalCommentVo
+                {
+                    CommentId = c.Id.ToString(),
+                    UserName = c.UserName,
+                    Content = c.Content,
+                    CreatedAt = c.CreatedAt,
+                })
+                .ToListAsync(cancellationToken);
+        }
+
+        return detail;
     }
 
     /// <summary>

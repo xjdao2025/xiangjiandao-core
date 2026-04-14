@@ -93,9 +93,11 @@ Handler 逻辑：
 
 #### 5.2 提案详情接口增加评论列表
 
-文件：`src/Xiangjiandao.Web/Endpoints/Proposal/ProposalDetailEndpoint.cs`
+文件：
+- `src/Xiangjiandao.Web/Endpoints/Proposal/ProposalDetailEndpoint.cs`
+- `src/Xiangjiandao.Web/Endpoints/AdminProposal/AdminProposalDetailEndpoint.cs`
 
-在 `ProposalDetailVo` 中新增字段：
+在 `ProposalDetailVo` 与 `AdminProposalDetailVo` 中新增字段：
 
 ```csharp
 public List<ProposalCommentVo> Comments { get; set; } = [];
@@ -107,7 +109,7 @@ public List<ProposalCommentVo> Comments { get; set; } = [];
 - `Content` (string)
 - `CreatedAt` (DateTimeOffset)
 
-修改 `ProposalQuery.Detail`：
+修改 `ProposalQuery.Detail` 与 `ProposalQuery.AdminDetail`：
 - 联查 `ProposalComments`（按 `proposal_id` + `deleted = 0` + 按 `created_at` 升序）
 
 ## 接口变更汇总
@@ -115,6 +117,7 @@ public List<ProposalCommentVo> Comments { get; set; } = [];
 | 接口 | 方法 | 变更 |
 |---|---|---|
 | `/api/v1/proposal/detail` | POST | 响应体新增 `comments` 数组 |
+| `/api/v1/admin/proposal/detail` | POST | 响应体新增 `comments` 数组 |
 | `/api/v1/proposal/comment` | POST | 新增接口，用于发表评论 |
 
 ## 安全性
