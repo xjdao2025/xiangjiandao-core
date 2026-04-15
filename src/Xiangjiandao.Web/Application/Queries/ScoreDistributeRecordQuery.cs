@@ -26,4 +26,20 @@ public class ScoreDistributeRecordQuery(ApplicationDbContext dbContext)
                 CreatedBy = record.CreatedBy
             }).ToPagedDataAsync(req.PageNum, req.PageSize, countTotal: true, cancellationToken: cancellationToken);
     }
+
+    public async Task<PagedData<ScoreDistributeRecordPageVo>> Page(ScoreDistributeRecordPageReq req,
+        CancellationToken cancellationToken)
+    {
+        return await (from record in dbContext.ScoreDistributeRecords
+                join user in dbContext.Users on record.UserId equals user.Id
+                orderby record.GetTime descending
+                select new ScoreDistributeRecordPageVo
+                {
+                    UserId = record.UserId,
+                    DomainName = user.DomainName,
+                    Score = record.Score,
+                    GetTime = record.GetTime
+                })
+            .ToPagedDataAsync(req.PageNum, req.PageSize, countTotal: true, cancellationToken: cancellationToken);
+    }
 }
