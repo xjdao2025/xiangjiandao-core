@@ -22,7 +22,7 @@ public class ScoreRecordQuery(ApplicationDbContext dbContext)
                 ParticipatorId = record.ParticipatorId,
                 Score = record.Score,
                 Type = record.Type,
-                Reason = record.Reason,
+                Reason = record.ParticipatorDomainName,
                 Remark = record.Remark,
                 CreatedAt = record.CreatedAt,
             }).ToPagedDataAsync(req.PageNum, req.PageSize, countTotal: true, cancellationToken);
