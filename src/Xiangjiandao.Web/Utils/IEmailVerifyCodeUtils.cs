@@ -11,9 +11,9 @@ namespace Xiangjiandao.Web.Utils;
 public interface IEmailVerifyCodeUtils
 {
     /// <summary>
-    /// 发送验证码, 默认过期时间 10 分钟
+    /// 发送验证码, 默认过期时间 30 分钟
     /// </summary>
-    Task<string> SendAsync(string toName, string toAddress, CodeType codeType, int expireTime = 600);
+    Task<string> SendAsync(string toName, string toAddress, CodeType codeType, int expireTime = 1800);
 
     /// <summary>
     /// 验证邮箱验证码
@@ -130,9 +130,9 @@ public class EmailVerifyCodeUtils(
     private const string VerifyCodePlaceHolder = "${verify-code}";
 
     /// <summary>
-    /// 发送验证码, 默认过期时间 10 分钟
+    /// 发送验证码, 默认过期时间 30 分钟
     /// </summary>
-    public async Task<string> SendAsync(string toName, string toAddress, CodeType codeType, int expireTime = 600)
+    public async Task<string> SendAsync(string toName, string toAddress, CodeType codeType, int expireTime = 1800)
     {
         var code = Random.Shared.Next(1000, 10000).ToString();
         logger.LogInformation("SendCode: toName {ToName}, toAddress {ToAddress}, code {Code}", toName, toAddress, code);
@@ -141,7 +141,7 @@ public class EmailVerifyCodeUtils(
 
         var officialWebsite = appOptions.Value.OfficialWebsite;
         var officialEmail = appOptions.Value.OfficialEmail;
-        var emailTemplate = "<!DOCTYPE html><html lang=\"en\"><head> <meta charset=\"UTF-8\"> <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"> <title>乡建DAO Verification Email</title> <style> body { font-family: Arial, sans-serif; margin: 0; padding: 0; background-color: #f5f5f5; } .container { max-width: 600px; margin: 20px auto; background-color: #ffffff; border: 1px solid #e0e0e0; border-radius: 10px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); } .header { background-color: #0078d4; color: #ffffff; padding: 10px 20px; border-radius: 10px 10px 0 0; text-align: left; } .header img { max-width: 100px; } .content { padding: 20px 20px 10px 20px; } .content p { margin: 0; line-height: 1.5; } .content .highlight { font-weight: bold; color: #0078d4; } .footer { font-size: 12px; color: #666666; padding: 5px 20px; } </style></head><body> <div class=\"container\"> <div class=\"header\"> <p><strong> 乡建DAO </strong></p> </div> <div class=\"content\"> <p><strong>[ 乡建DAO ] 验证码</strong></p> <br/> <p>您的验证码是 <span class=\"highlight\">${verify-code}</span>，验证有效期为10分钟。</p> <br/> </div> <div class=\"footer\"> <p>乡建DAO 系统邮件，请勿回复。</p> <p>官方网站: <a href=\""+officialWebsite+"\">"+officialWebsite+"</a> 官方邮箱: <a href=\"mailto:"+officialEmail+"\">"+officialEmail+"</a></p> </div> </div></body></html>";
+        var emailTemplate = "<!DOCTYPE html><html lang=\"en\"><head> <meta charset=\"UTF-8\"> <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"> <title>乡建DAO Verification Email</title> <style> body { font-family: Arial, sans-serif; margin: 0; padding: 0; background-color: #f5f5f5; } .container { max-width: 600px; margin: 20px auto; background-color: #ffffff; border: 1px solid #e0e0e0; border-radius: 10px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); } .header { background-color: #0078d4; color: #ffffff; padding: 10px 20px; border-radius: 10px 10px 0 0; text-align: left; } .header img { max-width: 100px; } .content { padding: 20px 20px 10px 20px; } .content p { margin: 0; line-height: 1.5; } .content .highlight { font-weight: bold; color: #0078d4; } .footer { font-size: 12px; color: #666666; padding: 5px 20px; } </style></head><body> <div class=\"container\"> <div class=\"header\"> <p><strong> 乡建DAO </strong></p> </div> <div class=\"content\"> <p><strong>[ 乡建DAO ] 验证码</strong></p> <br/> <p>您的验证码是 <span class=\"highlight\">${verify-code}</span>，验证有效期为30分钟。</p> <br/> </div> <div class=\"footer\"> <p>乡建DAO 系统邮件，请勿回复。</p> <p>官方网站: <a href=\""+officialWebsite+"\">"+officialWebsite+"</a> 官方邮箱: <a href=\"mailto:"+officialEmail+"\">"+officialEmail+"</a></p> </div> </div></body></html>";
         var content = emailTemplate.Replace(VerifyCodePlaceHolder, code);
 
         database.StringSet(key, code, TimeSpan.FromSeconds(expireTime));

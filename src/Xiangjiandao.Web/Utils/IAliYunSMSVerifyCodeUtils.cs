@@ -14,9 +14,9 @@ public interface IAliYunSMSVerifyCodeUtils
 #pragma warning restore S101
 {
     /// <summary>
-    /// 发送验证码, 默认过期时间 5分钟
+    /// 发送验证码, 默认过期时间 30分钟
     /// </summary>
-    Task<string> SendAsync(string phoneRegion, string phone, string scene, int expireTime = 300, CancellationToken cancellationToken = default!);
+    Task<string> SendAsync(string phoneRegion, string phone, string scene, int expireTime = 1800, CancellationToken cancellationToken = default!);
 
     /// <summary>
     /// 验证短信验证码
@@ -50,7 +50,7 @@ public class AliYunSmsVerifyCodeUtils(
     /// <param name="expireTime"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    public async Task<string> SendAsync(string phoneRegion, string phone,string scene, int expireTime = 300, CancellationToken cancellationToken = default!)
+    public async Task<string> SendAsync(string phoneRegion, string phone,string scene, int expireTime = 1800, CancellationToken cancellationToken = default!)
     {
         var code = Random.Shared.Next(100000, 999999).ToString();
         logger.LogInformation("SendCode: phoneRegion {PhoneRegion}, phone {Phone}, code {Code}", phoneRegion, phone, code);
